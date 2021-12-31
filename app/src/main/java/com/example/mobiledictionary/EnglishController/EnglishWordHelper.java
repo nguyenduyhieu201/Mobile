@@ -1,4 +1,4 @@
-package com.example.mobiledictionary;
+package com.example.mobiledictionary.EnglishController;
 
 import android.content.Context;
 import android.database.Cursor;

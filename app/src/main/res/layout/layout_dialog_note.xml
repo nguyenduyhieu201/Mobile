@@ -58,7 +58,7 @@
                 android:layout_weight="1"
                 android:textSize="14sp"
                 android:background="@drawable/bg_gray_corner_10"
-                android:text="Cancer"
+                android:text="Cancel"
                 />
         </LinearLayout>
     </LinearLayout>
