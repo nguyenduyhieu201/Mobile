@@ -43,7 +43,7 @@ public class EnglishWordHelper extends SQLiteOpenHelper {
     }
 
     public void NoteWord (String note, int id, String tableName) {
-        QueryData("Update '" + tableName + "' SET Note = " + note + " where Id = '"
+        QueryData("Update '" + tableName + "' SET Note = '" + note + "' where Id = '"
                 + id + "'");
     }
 
