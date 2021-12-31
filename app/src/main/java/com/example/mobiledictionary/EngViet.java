@@ -58,7 +58,6 @@ public class EngViet extends MainActivity {
             public void onClick(View v) {
                 mButtonHighlight.setChecked(false);
                 idWord = search(englishWordHelper,"NoiDung");
-//                Log.d("alo", word);
                 if (englishWordHelper.getHighlightWord(idWord,"NoiDung") == 0) {
                     mButtonHighlight.setChecked(false);
                     mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
@@ -97,6 +96,7 @@ public class EngViet extends MainActivity {
         });
     }
 
+    // hàm tìm kiếm từ vựng
     private int search(EnglishWordHelper englishWordHelper, String tableName) {
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -116,7 +116,6 @@ public class EngViet extends MainActivity {
             idWord = meaningCursor.getInt(0);
         }
         else value = null;
-//        String value = meaningCursor.getString(2);
         if (value == null) {
             meaning.setText("Khong co tu nao");
         }
@@ -126,6 +125,7 @@ public class EngViet extends MainActivity {
         return idWord;
     }
 
+    //mở đoạn dialog khi ấn vào nút
     private void open_Dialog_Note (int idWOrd, int gravity){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -167,7 +167,6 @@ public class EngViet extends MainActivity {
             public void onClick(View view) {
                 String note = edittext_note.getText().toString().trim();
                 englishWordHelper.NoteWord(note, idWord, "NoiDung");
-//                dialog.dismiss();
             }
         });
         dialog.show();
