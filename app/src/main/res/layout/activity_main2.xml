@@ -18,13 +18,13 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edittext_main_search"
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Search" />
+            android:hint="Search" />
 
         <Button
             android:id="@+id/bSearch"

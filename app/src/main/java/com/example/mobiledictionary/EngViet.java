@@ -2,6 +2,7 @@ package com.example.mobiledictionary;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -16,22 +17,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
 
 
-public class EngViet extends MainActivity {
-    private static final String TAG = "MainActivity";
+public class EngViet extends AppCompatActivity {
 
     private TextView mTextMessage;
     private Button mButton;
     private EditText mEditText;
     int flag = 0;
     private TextView word;
+    private EditText search_1;
     private LinearLayout lineShowMeanWord;
     //String word = "";
     int idWord = 0;
     private CompoundButton mButtonHighlight;
-    private Button mButtonOpen_Dialog_Note ;
+    private Button mButtonOpen_Dialog_Note;
     private EnglishWordHelper englishWordHelper = new EnglishWordHelper(this,
             "TuDienSqlite", null, 1);
     private String key1;
@@ -50,9 +53,18 @@ public class EngViet extends MainActivity {
         mButtonOpen_Dialog_Note = findViewById(R.id.button_open_dialog_note);
         mButton = findViewById(R.id.button);
         lineShowMeanWord.setVisibility(View.GONE);
-        search = findViewById(R.id.edittext);
-
+        search_1 = findViewById(R.id.edittext);
+        mButton.setEnabled(true);
+  //      englishWordHelper.CreateData("NoiDung");
+ //       englishWordHelper.InsertData("NoiDung","hi","xin chao");
+  //      englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
+  //      englishWordHelper.InsertData("NoiDung","cat","meo");
+ //       englishWordHelper.InsertData("NoiDung","dog","cho");
         //tìm kiếm từ vựng
+
+        Intent intent = getIntent();
+        String text = intent.getStringExtra(MainActivity.EXTRA_TEXT);
+        search_1.setText(text);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,11 +109,11 @@ public class EngViet extends MainActivity {
     }
 
     // hàm tìm kiếm từ vựng
-    private int search(EnglishWordHelper englishWordHelper, String tableName) {
+    public int search(EnglishWordHelper englishWordHelper, String tableName) {
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        String key1 = search.getText().toString().trim();
+        String key1 = search_1.getText().toString().trim();
         lineShowMeanWord.setVisibility(View.VISIBLE);
         word.setText(key1);
         TextView meaning= findViewById(R.id.meaning);
@@ -171,12 +183,9 @@ public class EngViet extends MainActivity {
         });
         dialog.show();
     }
+
 }
 
-//        englishWordHelper.CreateData("NoiDung");
-//        englishWordHelper.InsertData("NoiDung","hi","xin chao");
-//        englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
-//        englishWordHelper.InsertData("NoiDung","cat","meo");
-//        englishWordHelper.InsertData("NoiDung","dog","cho");
+
 //        englishWordHelper.InsertData("NoiDung","bird","chim");
 //        englishWordHelper.InsertData("NoiDung","note","ghi chu");
