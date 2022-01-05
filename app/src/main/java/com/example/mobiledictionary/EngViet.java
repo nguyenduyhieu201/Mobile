@@ -185,7 +185,3 @@ public class EngViet extends AppCompatActivity {
     }
 
 }
-
-
-//        englishWordHelper.InsertData("NoiDung","bird","chim");
-//        englishWordHelper.InsertData("NoiDung","note","ghi chu");
