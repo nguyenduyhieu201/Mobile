@@ -51,8 +51,9 @@ public class EngViet extends AppCompatActivity {
         word =  findViewById(R.id.word);
         mButtonHighlight = (ToggleButton) findViewById(R.id.buttonHighlight);
         mButtonOpen_Dialog_Note = findViewById(R.id.button_open_dialog_note);
-        mButton = findViewById(R.id.button);
-        lineShowMeanWord.setVisibility(View.GONE);
+        mButton = findViewById(R.id.bVietAnh_search);
+        mButtonHighlight.setVisibility(View.GONE);
+        mButtonOpen_Dialog_Note.setVisibility(View.GONE);
         search_1 = findViewById(R.id.edittext);
         mButton.setEnabled(true);
   //      englishWordHelper.CreateData("NoiDung");
@@ -65,19 +66,11 @@ public class EngViet extends AppCompatActivity {
         Intent intent = getIntent();
         String text = intent.getStringExtra(MainActivity.EXTRA_TEXT);
         search_1.setText(text);
+        if (text != null)  idWord = search(englishWordHelper,"NoiDung");
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mButtonHighlight.setChecked(false);
                 idWord = search(englishWordHelper,"NoiDung");
-                if (englishWordHelper.getHighlightWord(idWord,"NoiDung") == 0) {
-                    mButtonHighlight.setChecked(false);
-                    mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
-                }
-                else {
-                    mButtonHighlight.setChecked(true);
-                    mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
-                }
             }
         });
 
@@ -114,7 +107,6 @@ public class EngViet extends AppCompatActivity {
                 getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         String key1 = search_1.getText().toString().trim();
-        lineShowMeanWord.setVisibility(View.VISIBLE);
         word.setText(key1);
         TextView meaning= findViewById(R.id.meaning);
         Cursor meaningCursor = englishWordHelper.SearchWord(key1, tableName);
@@ -132,6 +124,17 @@ public class EngViet extends AppCompatActivity {
             meaning.setText("Khong co tu nao");
         }
         else {
+            mButtonHighlight.setVisibility(View.VISIBLE);
+            mButtonOpen_Dialog_Note.setVisibility(View.VISIBLE);
+            mButtonHighlight.setChecked(false);
+            if (englishWordHelper.getHighlightWord(idWord,"NoiDung") == 0) {
+                mButtonHighlight.setChecked(false);
+                mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
+            }
+            else {
+                mButtonHighlight.setChecked(true);
+                mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
+            }
             meaning.setText(value);
         }
         return idWord;

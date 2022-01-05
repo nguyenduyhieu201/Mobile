@@ -6,9 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.mobiledictionary.EnglishWord;
+
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EnglishWordHelper extends SQLiteOpenHelper {
+
     public EnglishWordHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -68,21 +74,32 @@ public class EnglishWordHelper extends SQLiteOpenHelper {
         + "',0,null)");
     }
 
-    /*public String[] getAllWord() {
-        String  wordsList[] ;
-        String query = "SELECT * FROM" + TABLE_NAME;
+    public List<EnglishWord> getAllWord() {
+        SQLiteDatabase database = getWritableDatabase();;
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
+        // on below line we are creating a cursor with query to read data from database.
+        Cursor cursorCourses = database.rawQuery("SELECT * FROM " + "NoiDung", null);
 
-        while(cursor.isAfterLast() == false) {
-            Student student = new Student(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-            studentList.add(student);
-            cursor.moveToNext();
+        // on below line we are creating a new array list.
+        List<EnglishWord> courseModalArrayList = new ArrayList<>();
+
+        // moving our cursor to first position.
+        if (cursorCourses.moveToFirst()) {
+            do {
+                // on below line we are adding the data from cursor to our array list.
+                courseModalArrayList.add(new EnglishWord(cursorCourses.getInt(0),
+                        cursorCourses.getString(1),
+                        cursorCourses.getString(2),
+                        cursorCourses.getInt(3),
+                        cursorCourses.getString(4)));
+            } while (cursorCourses.moveToNext());
+            // moving our cursor to next.
         }
-        return studentList;
-    }*/
+        // at last closing our cursor
+        // and returning our array list.
+        cursorCourses.close();
+        return courseModalArrayList;
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {

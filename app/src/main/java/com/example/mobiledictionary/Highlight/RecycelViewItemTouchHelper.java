@@ -52,7 +52,6 @@ class RecycelViewItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     }
 
 
-
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         View foregroundView = ((HighlightAdapter.HighlightViewHolder) viewHolder).foreground;

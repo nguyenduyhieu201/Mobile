@@ -25,13 +25,12 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
+import com.example.mobiledictionary.Highlight.MyWords;
 
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     protected int id;
-    public String mEnglishEditText;
-    private Button mButtonSetEngVietLayout;
     protected EditText search;
     public static final String EXTRA_TEXT = "com.example.application.example.EXTRA_TEXT";
 
@@ -39,14 +38,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        mButtonSetEngVietLayout = findViewById(R.id.bSearch);
-        mButtonSetEngVietLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openEngViet();
+
+        View.OnClickListener handler = new View.OnClickListener(){
+            public void onClick(View v) {
+
+                switch (v.getId()) {
+
+                    case R.id.bSearch:
+                        openEngViet();
+                        break;
+
+                    case R.id.bTuCuaBan:
+                        openHighlight();
+                        break;
+
+                    case R.id.bVietAnh:
+                        openEngViet();
+                        break;
+                }
             }
-        });
+        };
+
+        findViewById(R.id.bSearch).setOnClickListener(handler);
+        findViewById(R.id.bTuCuaBan).setOnClickListener(handler);
+        findViewById(R.id.bVietAnh).setOnClickListener(handler);
     }
+
 
     public void openEngViet() {
         search = (EditText) findViewById(R.id.edittext_main_search);
@@ -54,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, EngViet.class);
         intent.putExtra(EXTRA_TEXT, text);
+        startActivity(intent);
+    }
+
+    public void openHighlight() {
+
+        Intent intent = new Intent(this, MyWords.class);
         startActivity(intent);
     }
 }

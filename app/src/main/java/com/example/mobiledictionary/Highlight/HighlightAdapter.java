@@ -54,4 +54,14 @@ public class HighlightAdapter extends RecyclerView.Adapter<HighlightAdapter.High
             foreground = itemView.findViewById(R.id.layout_foreground);
         }
     }
+
+    public void removeItem(int index) {
+        mListHighlight.remove(index);
+        notifyItemRemoved(index);
+    }
+
+    public void undoItem(EnglishWord englishWord, int index) {
+        mListHighlight.add(index, englishWord);
+        notifyItemInserted(index);
+    }
 }

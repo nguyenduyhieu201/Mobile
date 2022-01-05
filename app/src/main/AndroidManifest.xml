@@ -11,6 +11,7 @@
         android:theme="@style/Theme.MobileDictionary">
         <activity
             android:name=".Highlight.MyWords"
+            android:parentActivityName=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".EngViet"
