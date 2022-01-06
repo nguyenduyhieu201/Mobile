@@ -1,21 +1,20 @@
-package com.example.mobiledictionary.EnglishController;
+package com.example.mobiledictionary.WordHelper;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
-import com.example.mobiledictionary.EnglishWord;
+import com.example.mobiledictionary.English.EnglishWord;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnglishWordHelper extends SQLiteOpenHelper {
+public class WordHelper extends SQLiteOpenHelper {
 
-    public EnglishWordHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
+    public WordHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
@@ -46,6 +45,24 @@ public class EnglishWordHelper extends SQLiteOpenHelper {
         HighlightWord.moveToNext();
         int highlightValue = HighlightWord.getInt(3);
         return highlightValue;
+    }
+
+    public List<EnglishWord> getHighlightList (String tableName) {
+        List<EnglishWord> courseCourses = new ArrayList<>();
+        Cursor highlightList = GetData ("Select * from " + tableName + " where Highlight = 1");
+        if (highlightList.getCount() == 0) {
+            return null;
+        }
+        else {
+            while (highlightList.moveToNext()) {
+                courseCourses.add(new EnglishWord(highlightList.getInt(0),
+                        highlightList.getString(1),
+                        highlightList.getString(2),
+                        highlightList.getInt(3),
+                        highlightList.getString(4)));
+            }
+        }
+        return courseCourses;
     }
 
     public void NoteWord (String note, int id, String tableName) {

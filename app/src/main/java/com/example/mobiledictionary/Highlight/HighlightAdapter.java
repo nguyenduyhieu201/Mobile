@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mobiledictionary.EnglishWord;
+//import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
+import com.example.mobiledictionary.WordHelper.WordHelper;
+import com.example.mobiledictionary.English.EnglishWord;
 import com.example.mobiledictionary.R;
 
 import java.util.List;
@@ -55,7 +57,9 @@ public class HighlightAdapter extends RecyclerView.Adapter<HighlightAdapter.High
         }
     }
 
-    public void removeItem(int index) {
+    public void removeItem(WordHelper englishWordHelper, int index) {
+        int id = mListHighlight.get(index).getId();
+        englishWordHelper.UnHighlightWord(id,"NoiDung");
         mListHighlight.remove(index);
         notifyItemRemoved(index);
     }

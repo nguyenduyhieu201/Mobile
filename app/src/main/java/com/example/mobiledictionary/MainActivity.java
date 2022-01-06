@@ -2,30 +2,14 @@ package com.example.mobiledictionary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
-import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
+import com.example.mobiledictionary.English.EngViet;
 import com.example.mobiledictionary.Highlight.MyWords;
+import com.example.mobiledictionary.Vietnamese.VietEng;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -53,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.bVietAnh:
-                        openEngViet();
+                        openVietAnh();
                         break;
                 }
             }
@@ -64,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bVietAnh).setOnClickListener(handler);
     }
 
-
+    //chuyển sang cửa sổ tra từ Anh-Việt
     public void openEngViet() {
         search = (EditText) findViewById(R.id.edittext_main_search);
         String text = search.getText().toString();
@@ -73,10 +57,15 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_TEXT, text);
         startActivity(intent);
     }
-
+    //chuyển sang cửa sổ highlight
     public void openHighlight() {
-
         Intent intent = new Intent(this, MyWords.class);
+        startActivity(intent);
+    }
+
+    //chuyển sang cửa sổ tra việt anh
+    public void openVietAnh() {
+        Intent intent = new Intent(this, VietEng.class);
         startActivity(intent);
     }
 }

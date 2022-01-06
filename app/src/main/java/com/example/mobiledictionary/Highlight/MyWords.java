@@ -11,12 +11,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
-import com.example.mobiledictionary.EnglishWord;
+//import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
+import com.example.mobiledictionary.WordHelper.WordHelper;
+import com.example.mobiledictionary.English.EnglishWord;
 import com.example.mobiledictionary.R;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyWords extends AppCompatActivity implements ItemTouchHelperListener {
@@ -24,7 +24,8 @@ public class MyWords extends AppCompatActivity implements ItemTouchHelperListene
     private HighlightAdapter adapter;
     private List<EnglishWord> mListHighlight;
     private LinearLayout rootView;
-    private EnglishWordHelper englishWordHelper;
+    private WordHelper englishWordHelper = new WordHelper(this,
+            "TuDienSqlite", null, 1);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +48,7 @@ public class MyWords extends AppCompatActivity implements ItemTouchHelperListene
     }
 
     private List<EnglishWord> getListHighlight() {
-        List<EnglishWord> list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            list.add(new EnglishWord(i, "ABC", "abc", 1, "a"));
-        }
-        return list;
+        return englishWordHelper.getHighlightList("NoiDung");
     }
 
     @Override
@@ -61,7 +58,9 @@ public class MyWords extends AppCompatActivity implements ItemTouchHelperListene
             final EnglishWord delete = mListHighlight.get(viewHolder.getAdapterPosition());
             int index = viewHolder.getAdapterPosition();
 
-            adapter.removeItem(index);
+            englishWordHelper.UnHighlightWord(delete.getId(),"NoiDung");
+            adapter.removeItem(englishWordHelper,index);
+
             Snackbar snackbar = Snackbar.make(rootView, "remove", Snackbar.LENGTH_LONG);
             snackbar.setAction("Undo", new View.OnClickListener() {
                 @Override

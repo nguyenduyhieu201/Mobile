@@ -14,7 +14,11 @@
             android:parentActivityName=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".EngViet"
+            android:name=".English.EngViet"
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Vietnamese.VietEng"
             android:parentActivityName=".MainActivity"
             android:exported="false" />
         <activity

@@ -1,15 +1,13 @@
-package com.example.mobiledictionary;
+package com.example.mobiledictionary.English;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -19,7 +17,10 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
+import com.example.mobiledictionary.EnglishController.WordController;
+import com.example.mobiledictionary.WordHelper.WordHelper;
+import com.example.mobiledictionary.MainActivity;
+import com.example.mobiledictionary.R;
 
 
 public class EngViet extends AppCompatActivity {
@@ -27,6 +28,7 @@ public class EngViet extends AppCompatActivity {
     private TextView mTextMessage;
     private Button mButton;
     private EditText mEditText;
+    private Button mEngSpeak;
     int flag = 0;
     private TextView word;
     private EditText search_1;
@@ -35,10 +37,11 @@ public class EngViet extends AppCompatActivity {
     int idWord = 0;
     private CompoundButton mButtonHighlight;
     private Button mButtonOpen_Dialog_Note;
-    private EnglishWordHelper englishWordHelper = new EnglishWordHelper(this,
+    private WordHelper englishWordHelper = new WordHelper(this,
             "TuDienSqlite", null, 1);
     private String key1;
-
+    private TextView meaning;
+    private WordController englishWordController = new WordController();
     public EngViet () {
 
     }
@@ -49,48 +52,41 @@ public class EngViet extends AppCompatActivity {
         mButtonOpen_Dialog_Note = findViewById(R.id.button_open_dialog_note);
         lineShowMeanWord =  findViewById(R.id.line_show_mean_word);
         word =  findViewById(R.id.word);
+        mEngSpeak = findViewById(R.id.button_EngSpeak);
         mButtonHighlight = (ToggleButton) findViewById(R.id.buttonHighlight);
         mButtonOpen_Dialog_Note = findViewById(R.id.button_open_dialog_note);
-        mButton = findViewById(R.id.bVietAnh_search);
+        mButton = findViewById(R.id.bAnh_search);
         mButtonHighlight.setVisibility(View.GONE);
         mButtonOpen_Dialog_Note.setVisibility(View.GONE);
         search_1 = findViewById(R.id.edittext);
+        meaning= findViewById(R.id.meaning);
         mButton.setEnabled(true);
   //      englishWordHelper.CreateData("NoiDung");
  //       englishWordHelper.InsertData("NoiDung","hi","xin chao");
   //      englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
-  //      englishWordHelper.InsertData("NoiDung","cat","meo");
+  //      englishWordHelper. InsertData("NoiDung","cat","meo");
  //       englishWordHelper.InsertData("NoiDung","dog","cho");
         //tìm kiếm từ vựng
 
         Intent intent = getIntent();
         String text = intent.getStringExtra(MainActivity.EXTRA_TEXT);
         search_1.setText(text);
-        if (text != null)  idWord = search(englishWordHelper,"NoiDung");
+        if (text != null)  {
+            idWord = englishWordController.search(search_1,word,englishWordHelper,
+                    "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note);
+        }
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                idWord = search(englishWordHelper,"NoiDung");
+//                idWord = search(englishWordHelper,"NoiDung");
+                idWord = englishWordController.search(search_1,word,englishWordHelper,
+                        "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note);
             }
         });
 
         //highlight từ vựng
-        mButtonHighlight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean checked = ((ToggleButton) v).isChecked();
-                //checked = true thi highlight = 1
-                if (checked){
-                    englishWordHelper.HighlightWord(idWord,"NoiDung");
-                    mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
-                }
-                //checked = false thi highlight = 0
-                else{
-                    englishWordHelper.UnHighlightWord(idWord,"NoiDung");
-                    mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
-                }
-            }
-        });
+        englishWordController.HighlightWord(mButtonHighlight, englishWordHelper,idWord,
+                "NoiDung");
 
         //mở đoạn ghi chú
         mButtonOpen_Dialog_Note.setOnClickListener(new View.OnClickListener() {
@@ -99,46 +95,16 @@ public class EngViet extends AppCompatActivity {
                 open_Dialog_Note(idWord, Gravity.CENTER);
             }
         });
+
+        mEngSpeak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("speaking", "speaking");
+            }
+        });
     }
 
     // hàm tìm kiếm từ vựng
-    public int search(EnglishWordHelper englishWordHelper, String tableName) {
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-        String key1 = search_1.getText().toString().trim();
-        word.setText(key1);
-        TextView meaning= findViewById(R.id.meaning);
-        Cursor meaningCursor = englishWordHelper.SearchWord(key1, tableName);
-
-        int idWord = 0;
-        String value = "";
-        int count = meaningCursor.getCount();
-        if (meaningCursor.getCount() > 0) {
-            meaningCursor.moveToNext();
-            value = meaningCursor.getString(2);
-            idWord = meaningCursor.getInt(0);
-        }
-        else value = null;
-        if (value == null) {
-            meaning.setText("Khong co tu nao");
-        }
-        else {
-            mButtonHighlight.setVisibility(View.VISIBLE);
-            mButtonOpen_Dialog_Note.setVisibility(View.VISIBLE);
-            mButtonHighlight.setChecked(false);
-            if (englishWordHelper.getHighlightWord(idWord,"NoiDung") == 0) {
-                mButtonHighlight.setChecked(false);
-                mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
-            }
-            else {
-                mButtonHighlight.setChecked(true);
-                mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
-            }
-            meaning.setText(value);
-        }
-        return idWord;
-    }
 
     //mở đoạn dialog khi ấn vào nút
     private void open_Dialog_Note (int idWOrd, int gravity){
@@ -188,3 +154,42 @@ public class EngViet extends AppCompatActivity {
     }
 
 }
+
+//
+//    public int search(WordHelper englishWordHelper, String tableName) {
+//        InputMethodManager inputManager = (InputMethodManager)
+//                getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputManager.hideSoftInputFromWindow((null == getCurrentFocus()) ? null : getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//        String key1 = search_1.getText().toString().trim();
+//        word.setText(key1);
+//        TextView meaning= findViewById(R.id.meaning);
+//        Cursor meaningCursor = englishWordHelper.SearchWord(key1, tableName);
+//
+//        int idWord = 0;
+//        String value = "";
+//        int count = meaningCursor.getCount();
+//        if (meaningCursor.getCount() > 0) {
+//            meaningCursor.moveToNext();
+//            value = meaningCursor.getString(2);
+//            idWord = meaningCursor.getInt(0);
+//        }
+//        else value = null;
+//        if (value == null) {
+//            meaning.setText("Khong co tu nao");
+//        }
+//        else {
+//            mButtonHighlight.setVisibility(View.VISIBLE);
+//            mButtonOpen_Dialog_Note.setVisibility(View.VISIBLE);
+//            mButtonHighlight.setChecked(false);
+//            if (englishWordHelper.getHighlightWord(idWord,"NoiDung") == 0) {
+//                mButtonHighlight.setChecked(false);
+//                mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
+//            }
+//            else {
+//                mButtonHighlight.setChecked(true);
+//                mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
+//            }
+//            meaning.setText(value);
+//        }
+//        return idWord;
+//    }

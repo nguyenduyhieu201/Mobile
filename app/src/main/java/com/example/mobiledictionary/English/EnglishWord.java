@@ -1,4 +1,4 @@
-package com.example.mobiledictionary;
+package com.example.mobiledictionary.English;
 
 public class EnglishWord {
     private int id;
