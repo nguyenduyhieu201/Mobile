@@ -1,22 +1,30 @@
 package com.example.mobiledictionary.Highlight;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
 //import com.example.mobiledictionary.EnglishController.EnglishWordHelper;
+import com.example.mobiledictionary.EnglishController.WordController;
 import com.example.mobiledictionary.WordHelper.WordHelper;
 import com.example.mobiledictionary.English.EnglishWord;
 import com.example.mobiledictionary.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class MyWords extends AppCompatActivity implements ItemTouchHelperListener {
@@ -26,11 +34,16 @@ public class MyWords extends AppCompatActivity implements ItemTouchHelperListene
     private LinearLayout rootView;
     private WordHelper englishWordHelper = new WordHelper(this,
             "TuDienSqlite", null, 1);
-
+    private WordController wordController = new WordController();
+    private Calendar rightNow = Calendar.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_my_words);
+        //define cho phần notification
+
+
+
         rootView = findViewById(R.id.root_view);
         rcvHighlight = findViewById(R.id.rcv_highlight);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -48,7 +61,7 @@ public class MyWords extends AppCompatActivity implements ItemTouchHelperListene
     }
 
     private List<EnglishWord> getListHighlight() {
-        return englishWordHelper.getHighlightList("NoiDung");
+        return englishWordHelper.getHighlightList("NoiDung","VietEngDemo");
     }
 
     @Override
@@ -72,4 +85,11 @@ public class MyWords extends AppCompatActivity implements ItemTouchHelperListene
             snackbar.show();
         }
     }
+
+    public void onCLick(RecyclerView.ViewHolder viewHolder) {
+        Log.d("String", "click vao viewholder");
+    }
+
+
+
 }

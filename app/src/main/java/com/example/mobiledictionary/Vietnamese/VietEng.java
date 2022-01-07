@@ -2,6 +2,8 @@ package com.example.mobiledictionary.Vietnamese;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobiledictionary.EnglishController.Speak;
 import com.example.mobiledictionary.EnglishController.WordController;
 import com.example.mobiledictionary.R;
 import com.example.mobiledictionary.WordHelper.WordHelper;
@@ -24,10 +27,13 @@ public class VietEng extends AppCompatActivity {
     private EditText vietSearchWord;
     private CompoundButton mButtonVietWordHighlight;
     private Button mButtonOpen_Dialog_VietWord_Note;
+    private Button mButtonVietSpeak;
+    private TextToSpeech textVietToSpeech;
     private WordHelper vietWordHelper = new WordHelper(this,
             "TuDienSqlite", null, 1);
     private int vietWordId = 0;
     private WordController vietWordController = new WordController();
+    private Speak speak = new Speak();
     public VietEng () {
 
     }
@@ -43,8 +49,16 @@ public class VietEng extends AppCompatActivity {
         vietSearchWord = findViewById(R.id.Vietedittext);
         mButtonVietWordHighlight = findViewById(R.id.buttonVietWordHighlight);
         mButtonOpen_Dialog_VietWord_Note = findViewById(R.id.button_open_VietWord_dialog_note);
+        mButtonVietSpeak = findViewById (R.id.button_VietSpeak);
         mButtonVietWordHighlight.setVisibility(View.GONE);
         mButtonOpen_Dialog_VietWord_Note.setVisibility(View.GONE);
+        mButtonVietSpeak.setVisibility(View.GONE);
+        textVietToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                speak.setTextToSpeechLanguage(textVietToSpeech,"VietNam");
+            }
+        });
 //        vietWordHelper.CreateData("VietEngDemo");
 //        vietWordHelper.InsertData("VietEngDemo","xin chao","hi");
 //        vietWordHelper.InsertData("VietEngDemo","xin chao 2","hello");
@@ -55,7 +69,7 @@ public class VietEng extends AppCompatActivity {
             public void onClick(View v) {
                 vietWordId = vietWordController.search(vietSearchWord, vietWord, vietWordHelper,
                         "VietEngDemo", engMean, mButtonVietWordHighlight,
-                        mButtonOpen_Dialog_VietWord_Note);
+                        mButtonOpen_Dialog_VietWord_Note,mButtonVietSpeak);
             }
         });
 
@@ -64,12 +78,19 @@ public class VietEng extends AppCompatActivity {
         vietWordController.HighlightWord(mButtonVietWordHighlight,vietWordHelper,vietWordId,
                 "VietEngDemo");
 
-
-
         mButtonOpen_Dialog_VietWord_Note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 open_Dialog_Note(vietWordId, Gravity.CENTER);
+            }
+        });
+
+        mButtonVietSpeak.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("dang noi", "dang noi");
+                speak.setTextToSpeechLanguage(textVietToSpeech,"VietNam");
+                speak.speakOut(textVietToSpeech, vietSearchWord,speak.getReady());
             }
         });
     }

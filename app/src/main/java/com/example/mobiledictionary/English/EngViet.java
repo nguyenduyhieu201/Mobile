@@ -1,6 +1,7 @@
 package com.example.mobiledictionary.English;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,16 +18,21 @@ import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mobiledictionary.EnglishController.Speak;
 import com.example.mobiledictionary.EnglishController.WordController;
 import com.example.mobiledictionary.WordHelper.WordHelper;
 import com.example.mobiledictionary.MainActivity;
 import com.example.mobiledictionary.R;
+
+import android.speech.tts.TextToSpeech;
+
 
 
 public class EngViet extends AppCompatActivity {
 
     private TextView mTextMessage;
     private Button mButton;
+    private Button mEngSpeakButton;
     private EditText mEditText;
     private Button mEngSpeak;
     int flag = 0;
@@ -42,6 +48,10 @@ public class EngViet extends AppCompatActivity {
     private String key1;
     private TextView meaning;
     private WordController englishWordController = new WordController();
+    private TextToSpeech textToSpeech;
+    private Speak speak = new Speak();
+    private boolean ready;
+
     public EngViet () {
 
     }
@@ -49,6 +59,7 @@ public class EngViet extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState2) {
         super.onCreate(savedInstanceState2);
         setContentView(R.layout.activity_main);
+        //gán giá trị cho các biến
         mButtonOpen_Dialog_Note = findViewById(R.id.button_open_dialog_note);
         lineShowMeanWord =  findViewById(R.id.line_show_mean_word);
         word =  findViewById(R.id.word);
@@ -59,8 +70,18 @@ public class EngViet extends AppCompatActivity {
         mButtonHighlight.setVisibility(View.GONE);
         mButtonOpen_Dialog_Note.setVisibility(View.GONE);
         search_1 = findViewById(R.id.edittext);
-        meaning= findViewById(R.id.meaning);
+        meaning = findViewById(R.id.meaning);
+        mEngSpeakButton = findViewById(R.id.button_EngSpeak);
+        mEngSpeakButton.setVisibility(View.GONE);
         mButton.setEnabled(true);
+
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                speak.setTextToSpeechLanguage(textToSpeech,"VietNam");
+            }
+        });
+
   //      englishWordHelper.CreateData("NoiDung");
  //       englishWordHelper.InsertData("NoiDung","hi","xin chao");
   //      englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
@@ -73,14 +94,16 @@ public class EngViet extends AppCompatActivity {
         search_1.setText(text);
         if (text != null)  {
             idWord = englishWordController.search(search_1,word,englishWordHelper,
-                    "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note);
+                    "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note,
+                    mEngSpeakButton);
         }
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                idWord = search(englishWordHelper,"NoiDung");
                 idWord = englishWordController.search(search_1,word,englishWordHelper,
-                        "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note);
+                        "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note,
+                        mEngSpeakButton);
             }
         });
 
@@ -96,10 +119,13 @@ public class EngViet extends AppCompatActivity {
             }
         });
 
+        //hàm phát âm
         mEngSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("speaking", "speaking");
+                speak.setTextToSpeechLanguage(textToSpeech,"English");
+                speak.speakOut(textToSpeech, search_1,speak.getReady());
             }
         });
     }
@@ -152,8 +178,13 @@ public class EngViet extends AppCompatActivity {
         });
         dialog.show();
     }
-
 }
+
+//      englishWordHelper.CreateData("NoiDung");
+//       englishWordHelper.InsertData("NoiDung","hi","xin chao");
+//      englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
+//      englishWordHelper. InsertData("NoiDung","cat","meo");
+//       englishWordHelper.InsertData("NoiDung","dog","cho");
 
 //
 //    public int search(WordHelper englishWordHelper, String tableName) {

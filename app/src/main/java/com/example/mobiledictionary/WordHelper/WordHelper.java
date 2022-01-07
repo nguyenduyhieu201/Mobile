@@ -47,9 +47,12 @@ public class WordHelper extends SQLiteOpenHelper {
         return highlightValue;
     }
 
-    public List<EnglishWord> getHighlightList (String tableName) {
+
+    public List<EnglishWord> getHighlightList (String tableNameEng, String tableNameViet) {
         List<EnglishWord> courseCourses = new ArrayList<>();
-        Cursor highlightList = GetData ("Select * from " + tableName + " where Highlight = 1");
+        Cursor highlightList = GetData ("Select * from " + tableNameEng
+                + " where Highlight = 1 UNION ALL Select * from " + tableNameViet +
+                " where Highlight = 1");
         if (highlightList.getCount() == 0) {
             return null;
         }
