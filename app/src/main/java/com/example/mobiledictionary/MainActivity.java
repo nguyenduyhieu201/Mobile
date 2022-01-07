@@ -1,5 +1,7 @@
 package com.example.mobiledictionary;
 
+import static androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -76,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(R.drawable.icon_star)
                 .setContentTitle(randomHighlightWord.getWord())
                 .setContentText(randomHighlightWord.getMeaning())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setVisibility(VISIBILITY_PUBLIC);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
-        if (wordController.compareTime(rightNow, 16, 26) == true)
+        if (wordController.compareTime(rightNow, 20, 33) == true)
             notificationManager.notify(100, builder.build());
-//        int hour24 = rightNow.get(Calendar.HOUR_OF_DAY);
-//        Log.d("curH", String.valueOf(hour24));
+
     }
 
     //chuyển sang cửa sổ tra từ Anh-Việt
