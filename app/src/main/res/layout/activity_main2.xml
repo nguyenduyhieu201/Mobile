@@ -67,12 +67,12 @@
         android:text="Từ của bạn" />
 
     <Button
-        android:id="@+id/bTuDaTra"
+        android:id="@+id/bCaiDat"
         android:layout_width="match_parent"
         android:layout_height="72dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:backgroundTint="#6CD5E3"
-        android:text="Từ đã tra" />
+        android:text="Cài đặt" />
 
 </LinearLayout>

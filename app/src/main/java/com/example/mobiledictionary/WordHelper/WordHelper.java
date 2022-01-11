@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.mobiledictionary.English.EnglishWord;
+import com.example.mobiledictionary.Notification.Receiver;
 
 import org.jetbrains.annotations.Nullable;
 

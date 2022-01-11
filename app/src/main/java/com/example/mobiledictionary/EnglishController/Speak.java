@@ -27,18 +27,24 @@ public class Speak extends Activity {
         this.ready = ready;
     }
     public Locale getUserSelectedLanguage(String languageSelected) {
-        if (languageSelected == "VietNam") {
+        if (languageSelected == "English") {
+            Locale engUS = new Locale("en", "GB");
+            return engUS;
+        }
+        else if (languageSelected == "VietNam") {
             Locale vietNam = new Locale("vi", "VN");
             return vietNam;
         }
+
         else {
-            return Locale.ENGLISH;
+            Locale engUK = new Locale("en","US");
+            return engUK;
         }
     }
 
     public void setTextToSpeechLanguage(TextToSpeech textToSpeech, String languageSelected) {
         Locale language = getUserSelectedLanguage(languageSelected);
-        Log.d("ngon ngu la: ", languageSelected);
+
         if (language == null) {
             setReady(false);
             Toast.makeText(this, "Not language selected", Toast.LENGTH_SHORT).show();

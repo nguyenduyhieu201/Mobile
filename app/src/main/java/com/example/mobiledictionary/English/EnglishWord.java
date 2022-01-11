@@ -15,7 +15,10 @@ public class EnglishWord {
         this.highlight = highlight;
         this.note = note;
     }
-
+    public EnglishWord (String word, String meaning) {
+        this.word = word;
+        this.meaning = meaning;
+    }
     public int getId () {
         return id;
     }

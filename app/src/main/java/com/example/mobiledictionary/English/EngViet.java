@@ -3,6 +3,7 @@ package com.example.mobiledictionary.English;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -51,6 +52,7 @@ public class EngViet extends AppCompatActivity {
     private TextToSpeech textToSpeech;
     private Speak speak = new Speak();
     private boolean ready;
+    public String languageSelected;
 
     public EngViet () {
 
@@ -74,6 +76,10 @@ public class EngViet extends AppCompatActivity {
         mEngSpeakButton = findViewById(R.id.button_EngSpeak);
         mEngSpeakButton.setVisibility(View.GONE);
         mButton.setEnabled(true);
+        SharedPreferences sharedPref = this.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        languageSelected = sharedPref.getString("accent","");
+        System.out.print(languageSelected);
 
         textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -82,11 +88,12 @@ public class EngViet extends AppCompatActivity {
             }
         });
 
-  //      englishWordHelper.CreateData("NoiDung");
- //       englishWordHelper.InsertData("NoiDung","hi","xin chao");
-  //      englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
-  //      englishWordHelper. InsertData("NoiDung","cat","meo");
- //       englishWordHelper.InsertData("NoiDung","dog","cho");
+//      englishWordHelper.CreateData("NoiDung");
+//      englishWordHelper.InsertData("NoiDung","hi","xin chao");
+//      englishWordHelper.InsertData("NoiDung","hello","xin chao 2");
+//      englishWordHelper. InsertData("NoiDung","cat","meo");
+//      englishWordHelper.InsertData("NoiDung","dog","cho");
+//      englishWordHelper.InsertData("NoiDung", "item","trang bi");
         //tìm kiếm từ vựng
 
         Intent intent = getIntent();
@@ -97,6 +104,9 @@ public class EngViet extends AppCompatActivity {
                     "NoiDung",meaning, mButtonHighlight, mButtonOpen_Dialog_Note,
                     mEngSpeakButton);
         }
+
+
+
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,8 +118,9 @@ public class EngViet extends AppCompatActivity {
         });
 
         //highlight từ vựng
-        englishWordController.HighlightWord(mButtonHighlight, englishWordHelper,idWord,
+        englishWordController.HighlightAWord(mButtonHighlight, englishWordHelper,idWord,
                 "NoiDung");
+
 
         //mở đoạn ghi chú
         mButtonOpen_Dialog_Note.setOnClickListener(new View.OnClickListener() {
@@ -123,8 +134,13 @@ public class EngViet extends AppCompatActivity {
         mEngSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("speaking", "speaking");
-                speak.setTextToSpeechLanguage(textToSpeech,"English");
+                Log.d("accent select", languageSelected);
+                if (languageSelected.equals("English")) {
+                    speak.setTextToSpeechLanguage(textToSpeech, "English");
+                } else {
+                    speak.setTextToSpeechLanguage(textToSpeech, "EngUS");
+
+                }
                 speak.speakOut(textToSpeech, search_1,speak.getReady());
             }
         });
@@ -177,6 +193,10 @@ public class EngViet extends AppCompatActivity {
             }
         });
         dialog.show();
+    }
+
+    public void setAccent (String languageSelected) {
+        this.languageSelected = languageSelected;
     }
 }
 

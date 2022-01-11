@@ -64,7 +64,7 @@ public class WordController{
         }
         return idWord;
     }
-    public void HighlightWord (CompoundButton mButtonHighlight, WordHelper englishWordHelper,
+    public void HighlightAWord (CompoundButton mButtonHighlight, WordHelper englishWordHelper,
                                int idWord, String tableName) {
         mButtonHighlight.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,11 +73,13 @@ public class WordController{
                 //checked = true thi highlight = 1
                 if (checked){
                     englishWordHelper.HighlightWord(idWord,tableName);
+                    Log.d("id", String.valueOf(idWord));
                     mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
                 }
                 //checked = false thi highlight = 0
                 else{
                     englishWordHelper.UnHighlightWord(idWord,tableName);
+                    Log.d("id", String.valueOf(idWord));
                     mButtonHighlight.setButtonDrawable(R.drawable.icon_star_48);
                 }
             }
@@ -148,9 +150,15 @@ public class WordController{
 
     //
     public EnglishWord getRandomWord (List<EnglishWord> highlightList) {
-        int lenHighlightList = highlightList.size() - 1;
-        int random = 0+(int)(Math.random()*((lenHighlightList-0)+1));
-        return highlightList.get(random);
+        if (highlightList != null) {
+            int lenHighlightList = highlightList.size() - 1;
+            int random = 0 + (int) (Math.random() * ((lenHighlightList - 0) + 1));
+            return highlightList.get(random);
+        }
+        else {
+            return new EnglishWord("Bạn chưa thêm từ mới vào",
+                    "Bạn hãy thêm bổ sung từ mới");
+        }
     }
 
 }

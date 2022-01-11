@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,13 +71,32 @@ public class VietEng extends AppCompatActivity {
                 vietWordId = vietWordController.search(vietSearchWord, vietWord, vietWordHelper,
                         "VietEngDemo", engMean, mButtonVietWordHighlight,
                         mButtonOpen_Dialog_VietWord_Note,mButtonVietSpeak);
+//                Log.d("id search VA", String.valueOf(vietWordId));
+
             }
         });
 
         //highlight từ vựng
-
-        vietWordController.HighlightWord(mButtonVietWordHighlight,vietWordHelper,vietWordId,
-                "VietEngDemo");
+//        vietWordController.HighlightAWord(mButtonVietWordHighlight,vietWordHelper,vietWordId,
+//                "VietEngDemo");
+        mButtonVietWordHighlight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean checked = ((ToggleButton) v).isChecked();
+                //checked = true thi highlight = 1
+                if (checked){
+                    vietWordHelper.HighlightWord(vietWordId,"VietEngDemo");
+                    Log.d("id", String.valueOf(vietWordId));
+                    mButtonVietWordHighlight.setButtonDrawable(R.drawable.icon_star);
+                }
+                //checked = false thi highlight = 0
+                else{
+                    vietWordHelper.UnHighlightWord(vietWordId,"VietEngDemo");
+                    Log.d("id", String.valueOf(vietWordId));
+                    mButtonVietWordHighlight.setButtonDrawable(R.drawable.icon_star_48);
+                }
+            }
+        });
 
         mButtonOpen_Dialog_VietWord_Note.setOnClickListener(new View.OnClickListener() {
             @Override
