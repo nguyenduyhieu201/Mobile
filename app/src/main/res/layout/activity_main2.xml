@@ -94,11 +94,11 @@
 
 </LinearLayout>
 
-    <!--    <Button-->
-    <!--        android:id="@+id/addDB"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="72dp"-->
-    <!--        android:layout_marginLeft="10dp"-->
-    <!--        android:layout_marginRight="10dp"-->
-    <!--        android:backgroundTint="#6CD5E3"-->
-    <!--        android:text="thêm DB" />-->
+<!--        <Button-->
+<!--            android:id="@+id/addDB"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="72dp"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:backgroundTint="#6CD5E3"-->
+<!--            android:text="thêm DB" />-->

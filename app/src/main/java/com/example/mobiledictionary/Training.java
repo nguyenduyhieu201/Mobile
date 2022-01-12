@@ -54,9 +54,11 @@ public class Training extends AppCompatActivity {
                 String input = wordInput.getText().toString();
                 if (input.equals(randomWord.getWord())) {
                     openAlertResult(true,randomWord.getWord());
+                    randomWord = wordController.getRandomWord(mListHighlight);
                 }
                 else {
                     openAlertResult(false, randomWord.getWord());
+                    randomWord = wordController.getRandomWord(mListHighlight);
                 }
             }
         });
