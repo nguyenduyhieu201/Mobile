@@ -85,58 +85,8 @@ public class MainActivity extends AppCompatActivity {
         highlightWordHelper.CreateData("NoiDung");
         highlightWordHelper.CreateData("VietEngDemo");
 
-//        highlightWordHelper.InsertData("VietEngDemo","xin chao","hi");
-//        highlightWordHelper.InsertData("VietEngDemo","xin chao 3","hello");
-//        highlightWordHelper.InsertData("VietEngDemo","dog","cho");
-//        highlightWordHelper.InsertData("VietEngDemo","cat","meo");
-//        highlightWordHelper.InsertData("VietEngDemo","tot","goodbye");
-//        highlightWordHelper.InsertData("NoiDung", "hi", "xin chao");
- //       highlightWordHelper.InsertData("NoiDung","asd","* danh từ,  số nhiều as,  a's|- (thông tục) loại a, hạng nhất, hạng tốt nhất hạng rất tốt|=  his health is a|    + sức khoẻ anh ta vào loại a|- (âm nhạc) la|=  a sharp|    + la thăng|=  a flat|    + la giáng|- người giả định thứ nhất; trường hợp giả định thứ nhất|=  from a to z|    + từ đầu đến đuôi, tường tận|=  not to know a from b|    + không biết tí gì cả; một chữ bẻ đôi cũng không biết|*");
-
-
-        // Đọc file dict.txt, tách word và meaning để thêm vào table database
-        try {
-            String[] line =ReadStaticfile(R.raw.dict).split("[\n]");
-            for (int i = 0; i < line.length; i++) {
-                String[] data = line[i].split("[\t|]");
-                String word = data[0].substring(1);
-                String meaning = "";
-                for (int j = 1; j < data.length; j++) {
-                    meaning += data[j] + "\n";
-                }
-                // đổi ký tự ' thành ^
-                meaning = meaning.replace(Character.toString((char) 39).charAt(0),Character.toString((char) 94).charAt(0));
-
-                System.out.println(meaning + "\n");
-                System.out.println(i);
-                highlightWordHelper.InsertData("NoiDung",word,meaning);
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Loi Anh Viet");
-        }
-
-        // Đọc file ve.txt, tách word và meaning để thêm vào table database
-        try {
-            String[] line =ReadStaticfile(R.raw.ve).split("[\n]");
-            for (int i = 0; i < line.length; i++) {
-                String[] data = line[i].split(" : ");
-                String word = data[0];
-                String meaning = "";
-                for (int j = 1; j < data.length; j++) {
-                    meaning += data[j] + "\n";
-                }
-                // đổi ký tự ' thành ^
-                meaning = meaning.replace(Character.toString((char) 39).charAt(0),Character.toString((char) 94).charAt(0));
-
-                System.out.println(word + "\n" + meaning);
-//                System.out.println(i);
-                highlightWordHelper.InsertData("VietEngDemo",word,meaning);
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-            System.out.println("Loi Viet Anh");
-        }
+        String pathdb = getDatabasePath("tudiensqlite.db").getPath();
+        Log.d("path la", pathdb);
         View.OnClickListener handler = new View.OnClickListener(){
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -155,6 +105,16 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.bCaiDat:
                         openSetting();
                         break;
+//                    case R.id.addDB:
+//                        addDatabase();
+//                        break;
+                    case R.id.finish:
+                        FinishApp();
+                        break;
+                    case R.id.training:
+                        openTraining();
+                        break;
+
                 }
             }
         };
@@ -163,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bTuCuaBan).setOnClickListener(handler);
         findViewById(R.id.bVietAnh).setOnClickListener(handler);
         findViewById(R.id.bCaiDat).setOnClickListener(handler);
+        findViewById(R.id.finish).setOnClickListener(handler);
+        findViewById(R.id.training).setOnClickListener(handler);
+//        findViewById(R.id.addDB).setOnClickListener(handler);
+
+
         //noi dung va tieu de notification
         List<EnglishWord> mListHighlight =
                 highlightWordHelper.getHighlightList("NoiDung","VietEngDemo");
@@ -191,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeSet,
                     24 * 60 * 60 * 1000, pendingIntent);
         }
+        // thêm vào db tiếng Việt
+
+        //thêm db tiếng Anh
+
     }
 
     // đọc file txt
@@ -241,7 +210,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openSetting() {
         Intent intent = new Intent(this, Setting.class);
-        Log.d("opensetting", "open setting");
+        startActivity(intent);
+    }
+
+    public void openTraining() {
+        Intent intent = new Intent(this, Training.class);
         startActivity(intent);
     }
 
@@ -258,9 +231,63 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-        Log.d("Create successfull", "created");
+    }
+    public void FinishApp () {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+
+        // Tao su kien ket thuc app
+//        highlightWordHelper.DeleteTable("NoiDung");
+//        highlightWordHelper.DeleteTable("VietEngDemo");
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startActivity(startMain);
+        finish();
     }
 
+    public void addDatabase() {
+        try {
+            String[] line =ReadStaticfile(R.raw.ve).split("[\n]");
+            for (int i = 0; i < line.length; i++) {
+                String[] data = line[i].split(" : ");
+                String word = data[0];
+                String meaning = "";
+                for (int j = 1; j < data.length; j++) {
+                    meaning += data[j] + "\n";
+                }
+                // đổi ký tự ' thành ^
+                meaning = meaning.replace(Character.toString((char) 39).charAt(0),Character.toString((char) 94).charAt(0));
+
+                System.out.println(word + "\n" + meaning);
+                System.out.println(i);
+                highlightWordHelper.InsertData("VietEngDemo",word,meaning);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Loi Viet Anh");
+        }
+        //thêm db tiếng Anh
+        try {
+            String[] line =ReadStaticfile(R.raw.dict).split("[\n]");
+            for (int i = 0; i < line.length; i++) {
+                String[] data = line[i].split("[\t|]");
+                String word = data[0].substring(1);
+                String meaning = "";
+                for (int j = 1; j < data.length; j++) {
+                    meaning += data[j] + "\n";
+                }
+                // đổi ký tự ' thành ^
+                meaning = meaning.replace(Character.toString((char) 39).charAt(0),Character.toString((char) 94).charAt(0));
+
+                System.out.println(meaning + "\n");
+                System.out.println(i);
+                highlightWordHelper.InsertData("NoiDung",word,meaning);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Loi Anh Viet");
+        }
+    }
 }
 
 
@@ -285,3 +312,12 @@ public class MainActivity extends AppCompatActivity {
 //                .setAutoCancel(true)
 //                .setVisibility(VISIBILITY_PUBLIC);
 //        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+//        highlightWordHelper.InsertData("VietEngDemo","xin chao","hi");
+//        highlightWordHelper.InsertData("VietEngDemo","xin chao 3","hello");
+//        highlightWordHelper.InsertData("VietEngDemo","dog","cho");
+//        highlightWordHelper.InsertData("VietEngDemo","cat","meo");
+//        highlightWordHelper.InsertData("VietEngDemo","tot","goodbye");
+//        highlightWordHelper.InsertData("NoiDung", "hi", "xin chao");
+//       highlightWordHelper.InsertData("NoiDung","asd","* danh từ,  số nhiều as,  a's|- (thông tục) loại a, hạng nhất, hạng tốt nhất hạng rất tốt|=  his health is a|    + sức khoẻ anh ta vào loại a|- (âm nhạc) la|=  a sharp|    + la thăng|=  a flat|    + la giáng|- người giả định thứ nhất; trường hợp giả định thứ nhất|=  from a to z|    + từ đầu đến đuôi, tường tận|=  not to know a from b|    + không biết tí gì cả; một chữ bẻ đôi cũng không biết|*");
+

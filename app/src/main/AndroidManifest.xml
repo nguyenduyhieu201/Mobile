@@ -29,7 +29,10 @@
             android:name=".Notification.NotificationWord"
             android:parentActivityName=".MainActivity"
             android:exported="false" />
-
+        <activity
+            android:name=".Training"
+            android:parentActivityName=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

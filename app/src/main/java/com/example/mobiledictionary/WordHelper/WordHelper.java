@@ -15,6 +15,7 @@ import java.util.List;
 
 public class WordHelper extends SQLiteOpenHelper {
 
+//    SQLiteDatabase database = SQLiteDatabase.openOrCreateDatabase("TuDienSqlite.db", null);
     public WordHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
@@ -94,6 +95,10 @@ public class WordHelper extends SQLiteOpenHelper {
         QueryData("INSERT INTO " + tableName + " Values (null, " + '"' + engWord + '"' + ", '" + meaning
         + "',0,null)");
 
+    }
+
+    public void DeleteTable(String tableName) {
+        QueryData("DROP TABLE " + tableName);
     }
 
     public List<EnglishWord> getAllWord() {
