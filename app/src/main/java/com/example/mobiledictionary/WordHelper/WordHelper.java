@@ -91,8 +91,9 @@ public class WordHelper extends SQLiteOpenHelper {
     }
 
     public void InsertData (String tableName, String engWord, String meaning) {
-        QueryData("INSERT INTO " + tableName + " Values (null, '" + engWord + "', '" + meaning
+        QueryData("INSERT INTO " + tableName + " Values (null, " + '"' + engWord + '"' + ", '" + meaning
         + "',0,null)");
+
     }
 
     public List<EnglishWord> getAllWord() {

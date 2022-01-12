@@ -60,7 +60,7 @@ public class WordController{
                 mButtonHighlight.setChecked(true);
                 mButtonHighlight.setButtonDrawable(R.drawable.icon_star);
             }
-            meaning.setText(value);
+            meaning.setText(value.replace(Character.toString((char) 94).charAt(0),Character.toString((char) 39).charAt(0)));
         }
         return idWord;
     }

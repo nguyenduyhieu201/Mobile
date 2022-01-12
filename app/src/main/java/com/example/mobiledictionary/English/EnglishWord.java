@@ -11,13 +11,13 @@ public class EnglishWord {
     {
         this.id = id;
         this.word = word;
-        this.meaning = meaning;
+        this.meaning = meaning.replace(Character.toString((char) 94).charAt(0),Character.toString((char) 39).charAt(0));
         this.highlight = highlight;
         this.note = note;
     }
     public EnglishWord (String word, String meaning) {
         this.word = word;
-        this.meaning = meaning;
+        this.meaning = meaning.replace(Character.toString((char) 94).charAt(0),Character.toString((char) 39).charAt(0));
     }
     public int getId () {
         return id;
@@ -26,7 +26,7 @@ public class EnglishWord {
         return word;
     }
     public String getMeaning () {
-        return meaning;
+        return meaning.replace(Character.toString((char) 94).charAt(0),Character.toString((char) 39).charAt(0));
     }
     public int getHighlight() {
         return highlight;

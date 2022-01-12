@@ -13,6 +13,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -29,6 +30,7 @@ import com.example.mobiledictionary.Notification.Receiver;
 import com.example.mobiledictionary.Vietnamese.VietEng;
 import com.example.mobiledictionary.WordHelper.WordHelper;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 
@@ -80,12 +82,61 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("minSetting", minPos);
         editor.apply();
 
-//        highlightWordHelper.CreateData("VietEngDemo");
+        highlightWordHelper.CreateData("NoiDung");
+        highlightWordHelper.CreateData("VietEngDemo");
+
 //        highlightWordHelper.InsertData("VietEngDemo","xin chao","hi");
 //        highlightWordHelper.InsertData("VietEngDemo","xin chao 3","hello");
 //        highlightWordHelper.InsertData("VietEngDemo","dog","cho");
 //        highlightWordHelper.InsertData("VietEngDemo","cat","meo");
 //        highlightWordHelper.InsertData("VietEngDemo","tot","goodbye");
+//        highlightWordHelper.InsertData("NoiDung", "hi", "xin chao");
+ //       highlightWordHelper.InsertData("NoiDung","asd","* danh từ,  số nhiều as,  a's|- (thông tục) loại a, hạng nhất, hạng tốt nhất hạng rất tốt|=  his health is a|    + sức khoẻ anh ta vào loại a|- (âm nhạc) la|=  a sharp|    + la thăng|=  a flat|    + la giáng|- người giả định thứ nhất; trường hợp giả định thứ nhất|=  from a to z|    + từ đầu đến đuôi, tường tận|=  not to know a from b|    + không biết tí gì cả; một chữ bẻ đôi cũng không biết|*");
+
+
+        // Đọc file dict.txt, tách word và meaning để thêm vào table database
+        try {
+            String[] line =ReadStaticfile(R.raw.dict).split("[\n]");
+            for (int i = 0; i < line.length; i++) {
+                String[] data = line[i].split("[\t|]");
+                String word = data[0].substring(1);
+                String meaning = "";
+                for (int j = 1; j < data.length; j++) {
+                    meaning += data[j] + "\n";
+                }
+                // đổi ký tự ' thành ^
+                meaning = meaning.replace(Character.toString((char) 39).charAt(0),Character.toString((char) 94).charAt(0));
+
+                System.out.println(meaning + "\n");
+                System.out.println(i);
+                highlightWordHelper.InsertData("NoiDung",word,meaning);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Loi Anh Viet");
+        }
+
+        // Đọc file ve.txt, tách word và meaning để thêm vào table database
+        try {
+            String[] line =ReadStaticfile(R.raw.ve).split("[\n]");
+            for (int i = 0; i < line.length; i++) {
+                String[] data = line[i].split(" : ");
+                String word = data[0];
+                String meaning = "";
+                for (int j = 1; j < data.length; j++) {
+                    meaning += data[j] + "\n";
+                }
+                // đổi ký tự ' thành ^
+                meaning = meaning.replace(Character.toString((char) 39).charAt(0),Character.toString((char) 94).charAt(0));
+
+                System.out.println(word + "\n" + meaning);
+//                System.out.println(i);
+                highlightWordHelper.InsertData("VietEngDemo",word,meaning);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("Loi Viet Anh");
+        }
         View.OnClickListener handler = new View.OnClickListener(){
             public void onClick(View v) {
                 switch (v.getId()) {
@@ -140,6 +191,31 @@ public class MainActivity extends AppCompatActivity {
             alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeSet,
                     24 * 60 * 60 * 1000, pendingIntent);
         }
+    }
+
+    // đọc file txt
+    private String ReadStaticfile(int rsID) {
+        String result = null;
+        try {
+            Resources resources = getResources();
+            InputStream is = resources.openRawResource(rsID);
+            // buoc 2 doc file
+            int flength = is.available();
+
+
+            if (flength != 0) {
+                byte[] buffer = new byte[flength];
+                if (is.read(buffer) != -1) {
+                    result = new String(buffer);
+//                    System.out.println(result);
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+//            LogUtil.LogE(TAG, e.toString());
+        }
+
+        return result;
     }
 
     //chuyển sang cửa sổ tra từ Anh-Việt
